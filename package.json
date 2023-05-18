@@ -1,0 +1,14 @@
+{
+  "name": "anonymous-chat",
+  "version": "1.0.0",
+  "description": "웹 기반 익명 채팅 서비스",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "author": "Jun Heo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
