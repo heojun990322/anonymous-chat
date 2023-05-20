@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ChatPage = () => {
+const Chatpage = () => {
   // setChats 함수로 chats 업데이트
   const [chats, setChats] = useState([]);
 
@@ -27,4 +27,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;
+export default Chatpage;

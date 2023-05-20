@@ -1,18 +1,15 @@
 import React from 'react';
-import {
-  ChakraProvider,
-  theme,
-} from '@chakra-ui/react';
-import { Route } from "react-router-dom";
-import HomePage from './Pages/HomePage';
-import ChatPage from './Pages/ChatPage';
+import './App.css';
+import { Route } from 'react-router-dom';
+import Homepage from './Pages/Homepage';
+import Chatpage from './Pages/Chatpage';
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
-      <Route path="/" component={ HomePage } exact />
-      <Route path="/chats" component={ ChatPage } />
-    </ChakraProvider>
+    <div className="App">
+      <Route path="/" component={Homepage} exact />
+      <Route path="/chats" component={Chatpage} />
+    </div>
   );
 }
 
