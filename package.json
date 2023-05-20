@@ -9,8 +9,10 @@
   "author": "Jun Heo",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.4.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "mongodb": "^5.5.0",
     "mongoose": "^7.1.2",
     "nodemon": "^2.0.22"
   }
