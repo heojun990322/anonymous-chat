@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const chatModel = mongoose.Schema(
   {
-    chatName: { type: String, trim: true },
-    isGroupChat: { type: Boolean, default: false },
+    name: { type: String, trim: true },
     users: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -14,7 +13,7 @@ const chatModel = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message",
     },
-    groupAdmin: {
+    admin: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
