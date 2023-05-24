@@ -58,4 +58,17 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, authUser };
+// 유저 검색
+const allUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        // search 변수의 문자열 패턴과 일치하는 id의 유저 리스트
+        $or: [{ id: { $regex: req.query.search } }],
+      }
+    : {};
+
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  res.send(users);
+});
+
+module.exports = { registerUser, authUser, allUsers };
