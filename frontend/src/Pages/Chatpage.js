@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ChatState } from '../context/ChatProvider';
+import { Box } from '@chakra-ui/react';
+import ChatBox from '../components/ChatBox';
+import MyChats from '../components/MyChats';
+import SideDrawer from '../components/miscellaneous/SideDrawer';
 
 const Chatpage = () => {
-  // setChats 함수로 chats 업데이트
-  const [chats, setChats] = useState([]);
-
-  // /api/chat에서 chat 배열을 가져와서 chats에 저장
-  const fetchChats = async () => {
-    const { data } = await axios.get('/api/chat');
-
-    setChats(data);
-  };
-
-  // 컴포넌트가 처음 나타날때에만 fetchChats 호출
-  useEffect(() => {
-    fetchChats();
-  }, []);
+  const { user } = ChatState();
 
   // 각 chat의 chatName을 출력
   return (
-    <div>
-      {chats.map(chat => (
-        <div key={chat._id}>{chat.chatName}</div>
-      ))}
+    <div style={{ width: '100%' }}>
+      {user && <SideDrawer />}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        w="100%"
+        h="91.5vh"
+        p="10px"
+      >
+        {user && <MyChats />}
+        {user && <ChatBox />}
+      </Box>
     </div>
   );
 };
