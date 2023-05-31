@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { FormControl, Input, VStack, Button, useToast } from '@chakra-ui/react';
 import axios from 'axios';
+import { ChatState } from '../../context/ChatProvider';
 
 const Login = () => {
   // form의 input 값
@@ -10,6 +11,7 @@ const Login = () => {
 
   const toast = useToast();
   const history = useHistory();
+  const { setUser } = ChatState();
 
   const submitHandler = async () => {
     // 입력하지 않은 필드가 있을 때
@@ -47,6 +49,8 @@ const Login = () => {
         position: 'bottom',
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
+      setUser(JSON.parse(localStorage.getItem('userInfo')));
+
       history.push('/chats');
     } catch (error) {
       toast({

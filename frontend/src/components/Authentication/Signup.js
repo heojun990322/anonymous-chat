@@ -9,6 +9,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
+import { ChatState } from '../../context/ChatProvider';
 
 const Signup = () => {
   // form의 input 값
@@ -18,6 +19,7 @@ const Signup = () => {
 
   const toast = useToast();
   const history = useHistory();
+  const { setUser } = ChatState();
 
   // sign up 버튼을 눌렀을 때 호출
   const submitHandler = async () => {
@@ -68,6 +70,8 @@ const Signup = () => {
         position: 'bottom',
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
+      setUser(JSON.parse(localStorage.getItem('userInfo')));
+
       history.push('/chats');
     } catch (error) {
       toast({

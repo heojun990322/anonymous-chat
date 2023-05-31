@@ -9,7 +9,6 @@ import SideDrawer from '../components/miscellaneous/SideDrawer';
 const Chatpage = () => {
   const { user } = ChatState();
 
-  // 각 chat의 chatName을 출력
   return (
     <div style={{ width: '100%' }}>
       {user && <SideDrawer />}
