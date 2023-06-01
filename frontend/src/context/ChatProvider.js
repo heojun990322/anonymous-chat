@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
 
   const history = useHistory();
 
