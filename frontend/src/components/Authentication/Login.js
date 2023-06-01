@@ -91,7 +91,7 @@ const Login = () => {
         />
       </FormControl>
       <Button
-        colorScheme='teal'
+        colorScheme="blue"
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}

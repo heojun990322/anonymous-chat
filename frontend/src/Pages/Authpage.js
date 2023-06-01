@@ -52,8 +52,8 @@ const Authpage = () => {
           borderWidth="1px"
           my="auto"
         >
-          <Tabs isFitted variant="soft-rounded" colorScheme="teal">
-            <TabList mb="1em">
+          <Tabs isFitted variant="soft-rounded" colorScheme="blue">
+            <TabList mt="1em">
               <Tab>Login</Tab>
               <Tab>Sign Up</Tab>
             </TabList>
