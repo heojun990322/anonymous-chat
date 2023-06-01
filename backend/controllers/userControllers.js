@@ -67,7 +67,10 @@ const allUsers = asyncHandler(async (req, res) => {
       }
     : {};
 
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  const users =
+    req.user === "anonymous"
+      ? await User.find(keyword)
+      : await User.find(keyword).find({ _id: { $ne: req.user._id } });
   res.send(users);
 });
 

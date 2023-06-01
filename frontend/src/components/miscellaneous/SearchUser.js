@@ -53,11 +53,17 @@ const SearchUser = () => {
     try {
       setLoading(true);
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
+      const config = user
+        ? {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        : {
+            headers: {
+              Authorization: `Bearer anonymous`,
+            },
+          };
 
       const { data } = await axios.get(`/api/user?search=${search}`, config);
 
