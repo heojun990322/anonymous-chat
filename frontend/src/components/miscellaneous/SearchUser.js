@@ -12,6 +12,7 @@ import {
   ModalBody,
   useToast,
   Box,
+  Spinner,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import axios from 'axios';
@@ -24,6 +25,7 @@ const SearchUser = () => {
 
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingChat, setLoadingChat] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
 
   const toast = useToast();
@@ -156,6 +158,7 @@ const SearchUser = () => {
                 </Box>
               )}
             </Box>
+            {loadingChat && <Spinner ml="auto" d="flex" />}
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
-import MyChats from '../components/MyChats';
+import ChatList from '../components/ChatList';
 import ChatBox from '../components/ChatBox';
 import Header from '../components/Header';
 
@@ -16,7 +16,7 @@ const Mainpage = () => {
         p="10px"
       >
         <ChatBox />
-        <MyChats />
+        <ChatList />
       </Box>
     </div>
   );
