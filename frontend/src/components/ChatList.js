@@ -43,7 +43,7 @@ const ChatList = ({ fetchAgain }) => {
       fetchChats();
     }
     // eslint-disable-next-line
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box
@@ -62,19 +62,10 @@ const ChatList = ({ fetchAgain }) => {
         fontFamily="Noto Sans KR"
         display="flex"
         w="100%"
-        justifyContent="space-between"
+        justifyContent="center"
         alignItems="center"
       >
         Chat List
-        <ChatModal>
-          <Button
-            display="flex"
-            fontSize={{ base: '17px', md: '10px', lg: '17px' }}
-            rightIcon={<AddIcon />}
-          >
-            Create Chat
-          </Button>
-        </ChatModal>
       </Box>
       <Box
         display="flex"
@@ -86,7 +77,11 @@ const ChatList = ({ fetchAgain }) => {
         borderRadius="lg"
         overflowY="hidden"
       >
-        {chats ? (
+        {!user ? (
+          <Text m="auto" fontSize="xl">
+            Login to use the chat list
+          </Text>
+        ) : chats ? (
           <Stack overflowY="scroll">
             {chats.map(chat => (
               <Box
@@ -115,11 +110,6 @@ const ChatList = ({ fetchAgain }) => {
           </Stack>
         ) : (
           <ChatLoading />
-        )}
-        {!user && (
-          <Text m="auto" fontSize="xl">
-            Login to use the chat list
-          </Text>
         )}
       </Box>
     </Box>

@@ -17,7 +17,7 @@ const Mainpage = () => {
         h="91.5vh"
         p="10px"
       >
-        <ChatBox />
+        <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
         <ChatList fetchAgain={fetchAgain} />
       </Box>
     </div>
