@@ -5,6 +5,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import ChatLoading from './miscellaneous/ChatLoading';
 import ChatModal from './miscellaneous/ChatModal';
+import { BsFillPersonFill } from 'react-icons/bs';
 
 const ChatList = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -21,8 +22,9 @@ const ChatList = ({ fetchAgain }) => {
       };
 
       const { data } = await axios.get('/api/chat', config);
-      setChats(data);
-      console.log(chats);
+
+      localStorage.setItem('chatsInfo', JSON.stringify(data));
+      setChats(JSON.parse(localStorage.getItem('chatsInfo')));
     } catch (error) {
       toast({
         title: 'Error Occured!',
@@ -41,7 +43,7 @@ const ChatList = ({ fetchAgain }) => {
       fetchChats();
     }
     // eslint-disable-next-line
-  }, [fetchAgain]);
+  }, []);
 
   return (
     <Box
@@ -86,11 +88,13 @@ const ChatList = ({ fetchAgain }) => {
       >
         {chats ? (
           <Stack overflowY="scroll">
-            {chats.map(chat => {
+            {chats.map(chat => (
               <Box
+                display="flex"
+                justifyContent="space-between"
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? '#38B2AC' : '#E8E8E8'}
+                bg={selectedChat === chat ? 'blue.800' : 'blue.50'}
                 color={selectedChat === chat ? 'white' : 'black'}
                 px={3}
                 py={2}
@@ -98,8 +102,16 @@ const ChatList = ({ fetchAgain }) => {
                 key={chat._id}
               >
                 <Text>{chat.name}</Text>
-              </Box>;
-            })}
+                <Text display="flex">
+                  <BsFillPersonFill
+                    style={{
+                      margin: '5 2 0 0',
+                    }}
+                  />
+                  {chat.users.length}
+                </Text>
+              </Box>
+            ))}
           </Stack>
         ) : (
           <ChatLoading />

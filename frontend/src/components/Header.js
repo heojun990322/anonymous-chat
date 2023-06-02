@@ -14,12 +14,14 @@ import SearchUser from './miscellaneous/SearchUser';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 const Header = () => {
-  const { user, setUser } = ChatState();
+  const { user, setUser, setChats } = ChatState();
 
   const history = useHistory();
   const logoutHandler = () => {
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('chatsInfo');
     setUser(null);
+    setChats([]);
 
     history.push('/');
   };
