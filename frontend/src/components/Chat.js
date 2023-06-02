@@ -34,7 +34,7 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
             <Box my="auto" color="gray.400">
               {'ID : ' + selectedChat._id}
             </Box>
-            <LeaveChat />
+            <LeaveChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
           </Text>
           <Box
             display="flex"
