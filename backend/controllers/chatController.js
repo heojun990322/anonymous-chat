@@ -6,7 +6,6 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
   try {
     Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
       .populate("users", "-password")
-      .populate("admin", "-password")
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
       .then(async (results) => {
@@ -41,12 +40,10 @@ const createChat = expressAsyncHandler(async (req, res) => {
     const chat = await Chat.create({
       name: req.body.name,
       users: users,
-      admin: req.user,
     });
 
     const fullChat = await Chat.findOne({ _id: chat._id })
       .populate("users", "-password")
-      .populate("admin", "-password");
 
     res.status(200).json(fullChat);
   } catch (error) {
@@ -55,33 +52,8 @@ const createChat = expressAsyncHandler(async (req, res) => {
   }
 });
 
-const renameChat = expressAsyncHandler(async (req, res) => {
-  const { chatId, chatName } = req.body;
-
-  const updatedChat = await Chat.findByIdAndUpdate(
-    chatId,
-    {
-      name: chatName,
-    },
-    {
-      new: true,
-    }
-  )
-    .populate("users", "-password")
-    .populate("admin", "-password");
-
-  if (!updatedChat) {
-    res.status(404);
-    throw new Error("Chat Not Found");
-  } else {
-    res.json(updatedChat);
-  }
-});
-
 const addToChat = expressAsyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
-
-  // check if the requester is admin
 
   const added = await Chat.findByIdAndUpdate(
     chatId,
@@ -93,7 +65,6 @@ const addToChat = expressAsyncHandler(async (req, res) => {
     }
   )
     .populate("users", "-password")
-    .populate("admin", "-password");
 
   if (!added) {
     res.status(404);
@@ -103,22 +74,19 @@ const addToChat = expressAsyncHandler(async (req, res) => {
   }
 });
 
-const removeFromChat = expressAsyncHandler(async (req, res) => {
-  const { chatId, userId } = req.body;
-
-  // check if the requester is admin
+const leaveChat = expressAsyncHandler(async (req, res) => {
+  const { chatId } = req.body;
 
   const removed = await Chat.findByIdAndUpdate(
     chatId,
     {
-      $pull: { users: userId },
+      $pull: { users: req.user._id },
     },
     {
       new: true,
     }
   )
     .populate("users", "-password")
-    .populate("admin", "-password");
 
   if (!removed) {
     res.status(404);
@@ -131,7 +99,6 @@ const removeFromChat = expressAsyncHandler(async (req, res) => {
 module.exports = {
   fetchChats,
   createChat,
-  renameChat,
   addToChat,
-  removeFromChat,
+  leaveChat,
 };
