@@ -12,15 +12,10 @@ import {
   useToast,
   FormControl,
   Input,
-  Flex,
-  Center,
-  chakra,
   Box,
 } from '@chakra-ui/react';
-import { SearchIcon } from '@chakra-ui/icons';
 import { ChatState } from '../../context/ChatProvider';
 import axios from 'axios';
-import UserListItem from './UserListItem';
 import SearchUser from './SearchUser';
 import UserBadgeItem from './UserBadgeItem';
 
@@ -28,9 +23,6 @@ const ChatModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [chatName, setChatName] = useState();
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [search, setSearch] = useState('');
-  const [searchResult, setSearchResult] = useState([]);
-  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const { user, chats, setChats } = ChatState();
 

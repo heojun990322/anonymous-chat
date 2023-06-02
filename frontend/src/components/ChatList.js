@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ChatState } from '../context/ChatProvider';
 import { Box, useToast, Button, Stack, Text } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import ChatLoading from './miscellaneous/ChatLoading';
-import ChatModal from './miscellaneous/ChatModal';
 import { BsFillPersonFill } from 'react-icons/bs';
 
 const ChatList = ({ fetchAgain }) => {
-  const [loggedUser, setLoggedUser] = useState();
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-
   const toast = useToast();
 
   const fetchChats = async () => {
@@ -39,7 +35,6 @@ const ChatList = ({ fetchAgain }) => {
 
   useEffect(() => {
     if (user) {
-      setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
       fetchChats();
     }
     // eslint-disable-next-line

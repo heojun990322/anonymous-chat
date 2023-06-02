@@ -3,7 +3,6 @@ import { ChatState } from '../context/ChatProvider';
 import { Box, Text, IconButton, Button } from '@chakra-ui/react';
 import { ArrowBackIcon, AddIcon } from '@chakra-ui/icons';
 import ChatModal from './miscellaneous/ChatModal';
-import { BiExit } from 'react-icons/bi';
 import LeaveChat from './miscellaneous/LeaveChat';
 
 const Chat = ({ fetchAgain, setFetchAgain }) => {
