@@ -76,8 +76,9 @@ const addToChat = expressAsyncHandler(async (req, res) => {
 
 const leaveChat = expressAsyncHandler(async (req, res) => {
   const { chatId } = req.body;
+  const chat = await Chat.findById(chatId);
 
-  const removed = await Chat.findByIdAndUpdate(
+  const leave = (chat?.users.length > 1) ? (await Chat.findByIdAndUpdate(
     chatId,
     {
       $pull: { users: req.user._id },
@@ -86,13 +87,15 @@ const leaveChat = expressAsyncHandler(async (req, res) => {
       new: true,
     }
   )
-    .populate("users", "-password")
+    .populate("users", "-password")) 
+    :
+    (await Chat.findByIdAndDelete(chatId));
 
-  if (!removed) {
+  if (!leave) {
     res.status(404);
     throw new Error("Chat Not Found");
   } else {
-    res.json(removed);
+    res.json(leave);
   }
 });
 
