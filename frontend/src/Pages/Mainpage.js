@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import ChatList from '../components/ChatList';
 import ChatBox from '../components/ChatBox';
 import Header from '../components/Header';
 
 const Mainpage = () => {
+  const [fetchAgain, setFetchAgain] = useState(false);
+
   return (
     <div style={{ width: '100%' }}>
       <Header />
@@ -16,7 +18,7 @@ const Mainpage = () => {
         p="10px"
       >
         <ChatBox />
-        <ChatList />
+        <ChatList fetchAgain={fetchAgain} />
       </Box>
     </div>
   );

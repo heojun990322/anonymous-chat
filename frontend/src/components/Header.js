@@ -31,9 +31,8 @@ const Header = () => {
         justifyContent="space-between"
         alignItems="center"
         w="100%"
-        p="8px 5px 5px 5px"
+        p="8px 5px 5px 15px"
       >
-        <SearchUser />
         <Link
           style={{
             fontSize: 'x-large',

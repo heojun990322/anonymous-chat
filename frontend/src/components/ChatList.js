@@ -3,9 +3,10 @@ import { ChatState } from '../context/ChatProvider';
 import { Box, useToast, Button, Stack, Text } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import axios from 'axios';
-import ChatLoading from './ChatLoading';
+import ChatLoading from './miscellaneous/ChatLoading';
+import ChatModal from './miscellaneous/ChatModal';
 
-const ChatList = () => {
+const ChatList = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
 
@@ -21,6 +22,7 @@ const ChatList = () => {
 
       const { data } = await axios.get('/api/chat', config);
       setChats(data);
+      console.log(chats);
     } catch (error) {
       toast({
         title: 'Error Occured!',
@@ -39,7 +41,7 @@ const ChatList = () => {
       fetchChats();
     }
     // eslint-disable-next-line
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box
@@ -62,13 +64,15 @@ const ChatList = () => {
         alignItems="center"
       >
         Chat List
-        <Button
-          display="flex"
-          fontSize={{ base: '17px', md: '10px', lg: '17px' }}
-          rightIcon={<AddIcon />}
-        >
-          Create Chat
-        </Button>
+        <ChatModal>
+          <Button
+            display="flex"
+            fontSize={{ base: '17px', md: '10px', lg: '17px' }}
+            rightIcon={<AddIcon />}
+          >
+            Create Chat
+          </Button>
+        </ChatModal>
       </Box>
       <Box
         display="flex"
@@ -80,28 +84,27 @@ const ChatList = () => {
         borderRadius="lg"
         overflowY="hidden"
       >
-        {user ? (
-          chats ? (
-            <Stack overflowY="scroll">
-              {chats.map(chat => {
-                <Box
-                  onClick={() => setSelectedChat(chat)}
-                  cursor="pointer"
-                  bg={selectedChat === chat ? '#38B2AC' : '#E8E8E8'}
-                  color={selectedChat === chat ? 'white' : 'black'}
-                  px={3}
-                  py={2}
-                  borderRadius="lg"
-                  key={chat._id}
-                >
-                  <Text>{chat.name}</Text>
-                </Box>;
-              })}
-            </Stack>
-          ) : (
-            <ChatLoading />
-          )
+        {chats ? (
+          <Stack overflowY="scroll">
+            {chats.map(chat => {
+              <Box
+                onClick={() => setSelectedChat(chat)}
+                cursor="pointer"
+                bg={selectedChat === chat ? '#38B2AC' : '#E8E8E8'}
+                color={selectedChat === chat ? 'white' : 'black'}
+                px={3}
+                py={2}
+                borderRadius="lg"
+                key={chat._id}
+              >
+                <Text>{chat.name}</Text>
+              </Box>;
+            })}
+          </Stack>
         ) : (
+          <ChatLoading />
+        )}
+        {!user && (
           <Text m="auto" fontSize="xl">
             Login to use the chat list
           </Text>

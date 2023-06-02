@@ -16,11 +16,11 @@ import {
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import axios from 'axios';
-import ChatLoading from '../ChatLoading';
+import ChatLoading from './ChatLoading';
 import { ChatState } from '../../context/ChatProvider';
 import UserListItem from './UserListItem';
 
-const SearchUser = () => {
+const SearchUser = ({ handleUsers }) => {
   const modal = useDisclosure();
 
   const [search, setSearch] = useState('');
@@ -83,13 +83,11 @@ const SearchUser = () => {
     }
   };
 
-  const accessChat = async userId => {};
-
   return (
     <>
       <Button variant="ghost" onClick={modal.onOpen}>
-        <SearchIcon color="teal.500" boxSize="18px" />
-        <Text d={{ base: 'none', md: 'flex' }} px={4}>
+        <SearchIcon color="blue.300" boxSize="18px" />
+        <Text display={{ base: 'none', md: 'flex' }} px={4}>
           Search User
         </Text>
       </Button>
@@ -133,7 +131,7 @@ const SearchUser = () => {
             />
             <Center pos="absolute" left={2} h="68px">
               <Button variant="ghost" onClick={handleSearch}>
-                <SearchIcon color="teal.500" boxSize="20px" />
+                <SearchIcon color="blue.300" boxSize="20px" />
               </Button>
             </Center>
           </Flex>
@@ -152,7 +150,7 @@ const SearchUser = () => {
                     <UserListItem
                       key={user._id}
                       user={user}
-                      handleFunction={() => accessChat(user._id)}
+                      handleFunction={() => handleUsers(user, modal.onClose)}
                     />
                   ))}
                 </Box>

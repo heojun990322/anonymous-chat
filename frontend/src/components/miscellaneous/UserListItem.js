@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 
 const UserListItem = ({ handleFunction, user }) => {
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+
   return (
     <Box
       onClick={handleFunction}
       cursor="pointer"
-      bg="gray.600"
-      _hover={{
-        background: '#38B2AC',
-        color: 'white',
-      }}
+      bg={isHovering ? 'blue.500' : 'gray.600'}
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
       w="100%"
       d="flex"
       alignItems="center"
