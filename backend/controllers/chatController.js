@@ -22,18 +22,23 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
 });
 
 const createChat = expressAsyncHandler(async (req, res) => {
+  // 익명 유저 생성
+  if (req.user === "anonymous" && req.body.isAnonymous) {
+    const user = await User.create({ isAnonymous: true });
+
+    if (user) {
+      req.user = user;
+    } else {
+      res.status(400);
+      throw new Error("Failed to create the anonymous User");
+    }
+  }
+
   if (!req.body.users || !req.body.name) {
     return res.status(400).send({ message: "Please Fill all the feilds" });
   }
 
   var users = JSON.parse(req.body.users);
-
-  if (users.length < 2) {
-    return res
-      .status(400)
-      .send("More than 2 users are required to form a chat");
-  }
-
   users.push(req.user);
 
   try {
@@ -42,8 +47,10 @@ const createChat = expressAsyncHandler(async (req, res) => {
       users: users,
     });
 
-    const fullChat = await Chat.findOne({ _id: chat._id })
-      .populate("users", "-password")
+    const fullChat = await Chat.findOne({ _id: chat._id }).populate(
+      "users",
+      "-password"
+    );
 
     res.status(200).json(fullChat);
   } catch (error) {
@@ -63,8 +70,7 @@ const addToChat = expressAsyncHandler(async (req, res) => {
     {
       new: true,
     }
-  )
-    .populate("users", "-password")
+  ).populate("users", "-password");
 
   if (!added) {
     res.status(404);
@@ -78,18 +84,18 @@ const leaveChat = expressAsyncHandler(async (req, res) => {
   const { chatId } = req.body;
   const chat = await Chat.findById(chatId);
 
-  const leave = (chat?.users.length > 1) ? (await Chat.findByIdAndUpdate(
-    chatId,
-    {
-      $pull: { users: req.user._id },
-    },
-    {
-      new: true,
-    }
-  )
-    .populate("users", "-password")) 
-    :
-    (await Chat.findByIdAndDelete(chatId));
+  const leave =
+    chat?.users.length > 1
+      ? await Chat.findByIdAndUpdate(
+          chatId,
+          {
+            $pull: { users: req.user._id },
+          },
+          {
+            new: true,
+          }
+        ).populate("users", "-password")
+      : await Chat.findByIdAndDelete(chatId);
 
   if (!leave) {
     res.status(404);
