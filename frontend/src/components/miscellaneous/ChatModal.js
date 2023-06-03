@@ -65,17 +65,20 @@ const ChatModal = ({ children }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: user ? `Bearer ${user.token}` : `Bearer anonymous`,
         },
       };
+
       const { data } = await axios.post(
         `/api/chat/create`,
         {
           name: chatName,
           users: JSON.stringify(selectedUsers.map(u => u._id)),
+          isAnonymous: !user ? true : false,
         },
         config
       );
+
       setChats([data, ...chats]);
       onClose();
       toast({
@@ -87,8 +90,8 @@ const ChatModal = ({ children }) => {
       });
     } catch (error) {
       toast({
-        title: 'Failed to Create the Chat!',
-        description: error.response.data,
+        title: 'Error Occured!',
+        description: 'Failed to Create the Chat!',
         status: 'error',
         duration: 4000,
         isClosable: true,

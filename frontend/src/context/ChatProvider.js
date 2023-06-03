@@ -11,7 +11,7 @@ const ChatProvider = ({ children }) => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const chatsInfo = JSON.parse(localStorage.getItem('chatsInfo'));
     setUser(userInfo);
-    setChats(chatsInfo);
+    chatsInfo ? setChats(chatsInfo) : setChats([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

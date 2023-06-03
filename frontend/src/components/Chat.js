@@ -6,12 +6,18 @@ import ChatModal from './miscellaneous/ChatModal';
 import LeaveChat from './miscellaneous/LeaveChat';
 
 const Chat = ({ fetchAgain, setFetchAgain }) => {
-  const { selectedChat, setSelectedChat, user } = ChatState();
+  const { chats, selectedChat, setSelectedChat, user } = ChatState();
 
   useEffect(() => {
     if (!user) setSelectedChat(null);
     // eslint-disable-next-line
   }, [user]);
+
+  useEffect(() => {
+    if (!user && chats.length === 1) {
+      setSelectedChat(chats[0]);
+    }
+  }, [chats]);
 
   return (
     <>
