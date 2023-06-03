@@ -30,7 +30,8 @@ const LeaveChat = ({ fetchAgain, setFetchAgain }) => {
           Authorization: user ? `Bearer ${user.token}` : `Bearer anonymous`,
         },
       };
-      const { data } = await axios.put(
+
+      const { left } = await axios.put(
         `/api/chat/leave`,
         {
           chatId: selectedChat._id,
@@ -38,6 +39,16 @@ const LeaveChat = ({ fetchAgain, setFetchAgain }) => {
         },
         config
       );
+
+      if (anonyUser) {
+        const { deleted } = await axios.put(
+          '/api/user/delete',
+          {
+            userId: anonyUser._id,
+          },
+          config
+        );
+      }
 
       setAnonyUser(null);
       setSelectedChat(null);

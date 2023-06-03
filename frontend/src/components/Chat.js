@@ -45,10 +45,14 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
             justifyContent="space-between"
             display="flex"
           >
-            <IconButton
-              icon={<ArrowBackIcon />}
-              onClick={() => setSelectedChat(null)}
-            />
+            {!anonyUser ? (
+              <IconButton
+                icon={<ArrowBackIcon />}
+                onClick={() => setSelectedChat(null)}
+              />
+            ) : (
+              <Box w="40px" h="40px"></Box>
+            )}
             <Box my="auto" color="gray.400">
               {'ID : ' + selectedChat._id}
             </Box>
