@@ -3,8 +3,9 @@ const bcrypt = require("bcryptjs");
 
 const userModel = mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    id: { type: String, unique: true },
+    password: { type: String },
+    isAnonymous: { type: Boolean, required: true, default: false },
   },
   {
     timestamps: true,
@@ -18,9 +19,8 @@ userModel.methods.matchPassword = async function (enteredPassword) {
 
 // 저장되기 전에 password 암호화
 userModel.pre("save", async function (next) {
-  if (!this.isModified) {
-    next();
-  }
+  if (this.isAnonymous) next();
+  if (!this.isModified) next();
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

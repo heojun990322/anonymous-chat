@@ -1,42 +1,57 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
-const Anony = require("../models/anonyModel");
 const generateToken = require("../config/generateToken");
 
 // 유저 등록
 const registerUser = asyncHandler(async (req, res) => {
-  const { id, password } = req.body;
+  const { id, password, isAnonymous } = req.body;
 
-  // id 또는 password를 입력하지 않았을 때
-  if (!id || !password) {
-    res.status(400);
-    throw new Error("Please Enter all the Feilds");
-  }
+  if (isAnonymous) {
+    // 익명 유저 생성
+    const user = await User.create({ isAnonymous });
 
-  const userExists = await User.findOne({ id });
-
-  // id가 존재할 때
-  if (userExists) {
-    res.status(400);
-    throw new Error("User already exists");
-  }
-
-  // 유저 생성
-  const user = await User.create({
-    id,
-    password,
-  });
-
-  // 유저 생성 여부에 따라 다르게 응답
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      id: user.id,
-      token: generateToken(user._id),
-    });
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400);
+      throw new Error("Failed to create the anonymous User");
+    }
   } else {
-    res.status(400);
-    throw new Error("Failed to create the User");
+    // id 또는 password를 입력하지 않았을 때
+    if (!id || !password) {
+      res.status(400);
+      throw new Error("Please Enter all the Feilds");
+    }
+
+    const userExists = await User.findOne({ id });
+
+    // id가 존재할 때
+    if (userExists) {
+      res.status(400);
+      throw new Error("User already exists");
+    }
+
+    // 유저 생성
+    const user = await User.create({
+      id,
+      password,
+      isAnonymous,
+    });
+
+    // 유저 생성 여부에 따라 다르게 응답
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        id: user.id,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400);
+      throw new Error("Failed to create the User");
+    }
   }
 });
 
@@ -91,4 +106,4 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
-module.exports = { registerUser, registerAnony, authUser, allUsers };
+module.exports = { registerUser, authUser, allUsers };
