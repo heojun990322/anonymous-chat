@@ -55,22 +55,6 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// 익명 등록
-const registerAnony = asyncHandler(async (req, res) => {
-  // 익명 생성
-  const anony = await Anony.create({});
-
-  if (anony) {
-    res.status(201).json({
-      _id: anony._id,
-      token: generateToken(anony._id),
-    });
-  } else {
-    res.status(400);
-    throw new Error("Failed to create the Anony");
-  }
-});
-
 // 유저 인증
 const authUser = asyncHandler(async (req, res) => {
   const { id, password } = req.body;
@@ -106,4 +90,17 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
-module.exports = { registerUser, authUser, allUsers };
+// 유저 삭제
+const deleteUser = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  const deleted = await User.findByIdAndDelete(userId);
+
+  if (!deleted) {
+    res.status(400);
+    throw new Error("Failed to delete the User");
+  } else {
+    res.json(deleted);
+  }
+});
+
+module.exports = { registerUser, authUser, allUsers, deleteUser };
