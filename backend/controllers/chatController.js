@@ -108,9 +108,24 @@ const leaveChat = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const findChat = expressAsyncHandler(async (req, res) => {
+  const chatList =
+    req.user === "anonymous" ? [] : JSON.parse(req.body.chatList);
+
+  try {
+    const keyword = req.query.search;
+    const chat = await Chat.findById(keyword);
+
+    chatList.includes(chat._id.toString()) ? res.send({}) : res.send(chat);
+  } catch (error) {
+    res.send({});
+  }
+});
+
 module.exports = {
   fetchChats,
   createChat,
   addToChat,
   leaveChat,
+  findChat,
 };
