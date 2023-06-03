@@ -81,15 +81,18 @@ const addToChat = expressAsyncHandler(async (req, res) => {
 });
 
 const leaveChat = expressAsyncHandler(async (req, res) => {
-  const { chatId } = req.body;
+  const { chatId, anonyUserId } = req.body;
   const chat = await Chat.findById(chatId);
+  const isAnonymous = req.user === "anonymous" && anonyUserId;
 
   const leave =
     chat?.users.length > 1
       ? await Chat.findByIdAndUpdate(
           chatId,
           {
-            $pull: { users: req.user._id },
+            $pull: !isAnonymous
+              ? { users: req.user._id }
+              : { users: anonyUserId },
           },
           {
             new: true,
