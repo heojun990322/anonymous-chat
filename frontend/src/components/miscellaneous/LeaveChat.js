@@ -15,28 +15,31 @@ import {
 } from '@chakra-ui/react';
 import { BiExit } from 'react-icons/bi';
 import { ChatState } from '../../context/ChatProvider';
-import axios from "axios";
+import axios from 'axios';
 
 const LeaveChat = ({ fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { selectedChat, setSelectedChat, user } = ChatState();
+  const { selectedChat, setSelectedChat, user, anonyUser, setAnonyUser } =
+    ChatState();
   const toast = useToast();
 
   const handleLeave = async () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: user ? `Bearer ${user.token}` : `Bearer anonymous`,
         },
       };
       const { data } = await axios.put(
         `/api/chat/leave`,
         {
           chatId: selectedChat._id,
+          anonyUserId: anonyUser ? anonyUser._id : null,
         },
         config
       );
 
+      setAnonyUser(null);
       setSelectedChat(null);
       setFetchAgain(!fetchAgain);
     } catch (error) {

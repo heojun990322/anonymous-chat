@@ -6,7 +6,14 @@ import ChatModal from './miscellaneous/ChatModal';
 import LeaveChat from './miscellaneous/LeaveChat';
 
 const Chat = ({ fetchAgain, setFetchAgain }) => {
-  const { chats, selectedChat, setSelectedChat, user } = ChatState();
+  const {
+    chats,
+    selectedChat,
+    setSelectedChat,
+    user,
+    anonyUser,
+    setAnonyUser,
+  } = ChatState();
 
   useEffect(() => {
     if (!user) setSelectedChat(null);
@@ -15,9 +22,15 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
 
   useEffect(() => {
     if (!user && chats.length === 1) {
-      setSelectedChat(chats[0]);
+      const users = chats[0].users;
+      console.log(users);
+      setAnonyUser(users[users.length - 1]);
     }
   }, [chats]);
+
+  useEffect(() => {
+    if (anonyUser) setSelectedChat(chats[0]);
+  }, [anonyUser]);
 
   return (
     <>
