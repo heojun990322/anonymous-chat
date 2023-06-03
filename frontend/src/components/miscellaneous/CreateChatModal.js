@@ -19,7 +19,7 @@ import axios from 'axios';
 import SearchUser from './SearchUser';
 import UserBadgeItem from './UserBadgeItem';
 
-const ChatModal = ({ children }) => {
+const CreateChatModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [chatName, setChatName] = useState();
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -150,4 +150,4 @@ const ChatModal = ({ children }) => {
   );
 };
 
-export default ChatModal;
+export default CreateChatModal;

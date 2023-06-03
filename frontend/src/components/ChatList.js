@@ -17,7 +17,7 @@ const ChatList = ({ fetchAgain }) => {
         },
       };
 
-      const { data } = await axios.get('/api/chat', config);
+      const { data } = await axios.get('/api/chat/fetch', config);
 
       localStorage.setItem('chatsInfo', JSON.stringify(data));
       setChats(JSON.parse(localStorage.getItem('chatsInfo')));

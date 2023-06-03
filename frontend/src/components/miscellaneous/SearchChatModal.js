@@ -15,11 +15,11 @@ import {
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import axios from 'axios';
-import ChatLoading from './ChatLoading';
 import { ChatState } from '../../context/ChatProvider';
-import UserListItem from './UserListItem';
+import ChatItem from './ChatItem';
+import { Spinner } from '@chakra-ui/react';
 
-const SearchUser = ({ handleUsers }) => {
+const SearchChatModal = ({ children }) => {
   const modal = useDisclosure();
 
   const [search, setSearch] = useState('');
@@ -28,7 +28,7 @@ const SearchUser = ({ handleUsers }) => {
 
   const toast = useToast();
 
-  const { user } = ChatState();
+  const { user, chats } = ChatState();
 
   React.useEffect(() => {
     if (modal.isOpen && search.length > 0) {
@@ -53,22 +53,26 @@ const SearchUser = ({ handleUsers }) => {
     try {
       setLoading(true);
 
-      const config = user
-        ? {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        : {
-            headers: {
-              Authorization: `Bearer anonymous`,
-            },
-          };
+      const config = {
+        headers: {
+          Authorization: user ? `Bearer ${user.token}` : `Bearer anonymous`,
+        },
+      };
 
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
+      const { data } = await axios.post(
+        `/api/chat?search=${search}`,
+        {
+          chatList: JSON.stringify(
+            user ? chats.map(chat => chat._id.toString()) : []
+          ),
+        },
+        config
+      );
+
+      console.log(data);
 
       setLoading(false);
-      setSearchResult(data);
+      setSearchResult([data]);
     } catch (error) {
       toast({
         title: 'Error Occured!',
@@ -81,14 +85,12 @@ const SearchUser = ({ handleUsers }) => {
     }
   };
 
+  const handleUsers = (userToAdd, onClose) => {};
+
   return (
     <>
-      <Button variant="ghost" onClick={modal.onOpen}>
-        <SearchIcon color="blue.300" boxSize="18px" />
-        <Text display={{ base: 'none', md: 'flex' }} px={4}>
-          Search User
-        </Text>
-      </Button>
+      <span onClick={modal.onOpen}>{children}</span>
+
       <Modal
         scrollBehavior="inside"
         isOpen={modal.isOpen}
@@ -121,7 +123,7 @@ const SearchUser = ({ handleUsers }) => {
                 outline: 0,
                 bg: 'gray.700',
               }}
-              placeholder="Search User to Chat"
+              placeholder="Enter the Chat ID"
               value={search}
               onChange={e => {
                 setSearch(e.target.value);
@@ -141,14 +143,15 @@ const SearchUser = ({ handleUsers }) => {
               }}
             >
               {loading ? (
-                <ChatLoading />
+                <Box pb={6} display="flex" justifyContent="center">
+                  <Spinner />
+                </Box>
               ) : (
                 <Box role="listbox" borderTopWidth="1px" pt={4} pb={4}>
-                  {searchResult?.map(user => (
-                    <UserListItem
-                      key={user._id}
-                      user={user}
-                      handleFunction={() => handleUsers(user, modal.onClose)}
+                  {searchResult?.map(chat => (
+                    <ChatItem
+                      chat={chat}
+                      handleFunction={() => handleUsers(chat, modal.onClose)}
                     />
                   ))}
                 </Box>
@@ -161,4 +164,4 @@ const SearchUser = ({ handleUsers }) => {
   );
 };
 
-export default SearchUser;
+export default SearchChatModal;

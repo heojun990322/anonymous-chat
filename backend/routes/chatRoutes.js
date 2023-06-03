@@ -10,7 +10,7 @@ const {
 
 const router = express.Router();
 
-router.route("/").get(protect, findChat);
+router.route("/").post(protect, findChat);
 router.route("/fetch").get(protect, fetchChats);
 router.route("/create").post(protect, createChat);
 router.route("/add").put(protect, addToChat);

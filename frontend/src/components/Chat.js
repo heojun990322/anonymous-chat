@@ -2,8 +2,10 @@ import React, { useEffect } from 'react';
 import { ChatState } from '../context/ChatProvider';
 import { Box, Text, IconButton, Button } from '@chakra-ui/react';
 import { ArrowBackIcon, AddIcon } from '@chakra-ui/icons';
-import ChatModal from './miscellaneous/ChatModal';
+import CreateChatModal from './miscellaneous/CreateChatModal';
+import SearchChatModal from './miscellaneous/SearchChatModal';
 import LeaveChat from './miscellaneous/LeaveChat';
+import { SearchIcon } from '@chakra-ui/icons';
 
 const Chat = ({ fetchAgain, setFetchAgain }) => {
   const {
@@ -76,19 +78,32 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
         // to get socket.io on same page
         <Box
           display="flex"
+          flexDir="column"
           alignItems="center"
           justifyContent="center"
           h="100%"
         >
-          <ChatModal>
+          <CreateChatModal>
             <Button
+              mb="1em"
+              p="1em"
               display="flex"
-              fontSize={{ base: '17px', md: '10px', lg: '17px' }}
+              fontSize={{ base: '45px', md: '20px', lg: '45px' }}
               rightIcon={<AddIcon />}
             >
               Create Chat
             </Button>
-          </ChatModal>
+          </CreateChatModal>
+          <SearchChatModal>
+            <Button
+              p="1em"
+              display="flex"
+              fontSize={{ base: '45px', md: '20px', lg: '45px' }}
+              rightIcon={<SearchIcon />}
+            >
+              Search Chat
+            </Button>
+          </SearchChatModal>
         </Box>
       )}
     </>
