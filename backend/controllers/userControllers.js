@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const Anony = require("../models/anonyModel");
 const generateToken = require("../config/generateToken");
 
 // 유저 등록
@@ -39,6 +40,22 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// 익명 등록
+const registerAnony = asyncHandler(async (req, res) => {
+  // 익명 생성
+  const anony = await Anony.create({});
+
+  if (anony) {
+    res.status(201).json({
+      _id: anony._id,
+      token: generateToken(anony._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Failed to create the Anony");
+  }
+});
+
 // 유저 인증
 const authUser = asyncHandler(async (req, res) => {
   const { id, password } = req.body;
@@ -74,4 +91,4 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
-module.exports = { registerUser, authUser, allUsers };
+module.exports = { registerUser, registerAnony, authUser, allUsers };
