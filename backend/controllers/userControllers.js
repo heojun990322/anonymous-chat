@@ -4,7 +4,7 @@ const generateToken = require("../config/generateToken");
 
 // 유저 등록
 const registerUser = asyncHandler(async (req, res) => {
-  const { id, password, isAnonymous } = req.body;
+  const { id, userName, password, isAnonymous } = req.body;
 
   if (isAnonymous) {
     // 익명 유저 생성
@@ -20,7 +20,7 @@ const registerUser = asyncHandler(async (req, res) => {
       throw new Error("Failed to create the anonymous User");
     }
   } else {
-    // id 또는 password를 입력하지 않았을 때
+    // id, password을 입력하지 않았을 때
     if (!id || !password) {
       res.status(400);
       throw new Error("Please Enter all the Feilds");
@@ -37,6 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
     // 유저 생성
     const user = await User.create({
       id,
+      userName,
       password,
       isAnonymous,
     });
@@ -46,6 +47,7 @@ const registerUser = asyncHandler(async (req, res) => {
       res.status(201).json({
         _id: user._id,
         id: user.id,
+        userName: user.userName,
         token: generateToken(user._id),
       });
     } else {
@@ -66,6 +68,7 @@ const authUser = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       id: user.id,
+      userName: user.userName,
       token: generateToken(user._id),
     });
   } else {
