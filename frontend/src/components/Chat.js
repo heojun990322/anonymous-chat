@@ -22,6 +22,7 @@ import ScrollableChat from './ScrollableChat';
 const Chat = ({ fetchAgain, setFetchAgain }) => {
   const {
     chats,
+    setChats,
     selectedChat,
     setSelectedChat,
     user,
@@ -51,6 +52,11 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
   }, [anonyUser]);
 
   useEffect(() => {
+    if (!selectedChat && anonyUser) {
+      setChats([]);
+      setAnonyUser(null);
+    }
+
     fetchMessages();
     // eslint-disable-next-line
   }, [selectedChat]);
@@ -72,7 +78,6 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
         config
       );
 
-      console.log(data);
       setMessages(data);
       setLoading(false);
     } catch (error) {
@@ -142,18 +147,14 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
             justifyContent="space-between"
             display="flex"
           >
-            {!anonyUser ? (
-              <IconButton
-                icon={<ArrowBackIcon />}
-                onClick={() => setSelectedChat(null)}
-              />
-            ) : (
-              <Box w="40px" h="40px"></Box>
-            )}
+            <IconButton
+              icon={<ArrowBackIcon />}
+              onClick={() => setSelectedChat(null)}
+            />
             <Box my="auto" color="gray.400">
               {'ID : ' + selectedChat._id}
             </Box>
-            <LeaveChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+            {/*<LeaveChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />*/}
           </Text>
           <Box
             display="flex"
