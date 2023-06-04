@@ -16,6 +16,8 @@ import SearchChatModal from './miscellaneous/SearchChatModal';
 import LeaveChat from './miscellaneous/LeaveChat';
 import { SearchIcon } from '@chakra-ui/icons';
 import axios from 'axios';
+import './style.css';
+import ScrollableChat from './ScrollableChat';
 
 const Chat = ({ fetchAgain, setFetchAgain }) => {
   const {
@@ -39,14 +41,51 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     if (!user && chats.length === 1) {
       const users = chats[0].users;
-      console.log(users);
-      setAnonyUser(users[users.length - 1]);
+      if (users[users.length - 1].isAnonymous)
+        setAnonyUser(users[users.length - 1]);
     }
   }, [chats]);
 
   useEffect(() => {
     if (anonyUser) setSelectedChat(chats[0]);
   }, [anonyUser]);
+
+  useEffect(() => {
+    fetchMessages();
+    // eslint-disable-next-line
+  }, [selectedChat]);
+
+  const fetchMessages = async () => {
+    if (!selectedChat) return;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: user ? `Bearer ${user.token}` : `Bearer anonymous`,
+        },
+      };
+
+      setLoading(true);
+
+      const { data } = await axios.get(
+        `/api/message/${selectedChat._id}`,
+        config
+      );
+
+      console.log(data);
+      setMessages(data);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: 'Error Occured!',
+        description: 'Failed to Load the Messages',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom',
+      });
+    }
+  };
 
   const sendMessage = async event => {
     if (event.key === 'Enter' && newMessage) {
@@ -137,7 +176,9 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <div>{/* Messages */}</div>
+              <div className="messages">
+                {(user || anonyUser) && <ScrollableChat messages={messages} />}
+              </div>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
               <Input
