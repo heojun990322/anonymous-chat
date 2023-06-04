@@ -59,13 +59,23 @@ const createChat = expressAsyncHandler(async (req, res) => {
   }
 });
 
-const addToChat = expressAsyncHandler(async (req, res) => {
-  const { chatId, userId } = req.body;
+const enterChat = expressAsyncHandler(async (req, res) => {
+  // 익명 유저 생성
+  if (req.user === "anonymous" && req.body.isAnonymous) {
+    const user = await User.create({ isAnonymous: true });
+
+    if (user) {
+      req.user = user;
+    } else {
+      res.status(400);
+      throw new Error("Failed to create the anonymous User");
+    }
+  }
 
   const added = await Chat.findByIdAndUpdate(
-    chatId,
+    req.body.chatId,
     {
-      $push: { users: userId },
+      $push: { users: req.user._id },
     },
     {
       new: true,
@@ -125,7 +135,7 @@ const findChat = expressAsyncHandler(async (req, res) => {
 module.exports = {
   fetchChats,
   createChat,
-  addToChat,
+  enterChat,
   leaveChat,
   findChat,
 };
