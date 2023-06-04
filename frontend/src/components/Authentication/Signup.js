@@ -14,6 +14,7 @@ import { ChatState } from '../../context/ChatProvider';
 const Signup = () => {
   // form의 input 값
   const [id, setId] = useState();
+  const [userName, setUserName] = useState('');
   const [confirmpassword, setConfirmpassword] = useState();
   const [password, setPassword] = useState();
 
@@ -58,6 +59,7 @@ const Signup = () => {
         '/api/user',
         {
           id,
+          userName: userName === '' ? 'user' : userName,
           password,
         },
         config
@@ -93,6 +95,15 @@ const Signup = () => {
           bg={'gray.100'}
           border={0}
           onChange={e => setId(e.target.value)}
+          mb={3}
+        />
+      </FormControl>
+      <FormControl id="userName">
+        <FormLabel>Name</FormLabel>
+        <Input
+          bg={'gray.100'}
+          border={0}
+          onChange={e => setUserName(e.target.value)}
           mb={3}
         />
       </FormControl>

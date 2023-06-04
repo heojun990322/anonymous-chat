@@ -11,6 +11,8 @@ import {
   ModalBody,
   useToast,
   Box,
+  FormControl,
+  Input,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import axios from 'axios';
@@ -25,6 +27,7 @@ const SearchChatModal = ({ children }) => {
   const [searchResult, setSearchResult] = useState([]);
   const toast = useToast();
   const { user, chats, setChats } = ChatState();
+  const [anonyUserName, setAnonyUserName] = useState('');
 
   React.useEffect(() => {
     if (modal.isOpen && search.length > 0) {
@@ -95,7 +98,7 @@ const SearchChatModal = ({ children }) => {
         `/api/chat/enter`,
         {
           chatId: chat._id,
-          isAnonymous: !user ? true : false,
+          anonyUserName: anonyUserName === '' ? 'user' : anonyUserName,
         },
         config
       );
@@ -124,6 +127,7 @@ const SearchChatModal = ({ children }) => {
         scrollBehavior="inside"
         isOpen={modal.isOpen}
         onClose={modal.onClose}
+        isCentered
       >
         <ModalOverlay />
         <ModalContent
@@ -176,14 +180,25 @@ const SearchChatModal = ({ children }) => {
                   <Spinner />
                 </Box>
               ) : (
-                <Box role="listbox" borderTopWidth="1px" pt={4} pb={4}>
-                  {searchResult?.map(chat => (
-                    <ChatItem
-                      chat={chat}
-                      handleFunction={() => handleEnterChat(chat)}
-                    />
-                  ))}
-                </Box>
+                <>
+                  <Box role="listbox" borderTopWidth="1px" pt={4} pb={4}>
+                    {searchResult?.map(chat => (
+                      <ChatItem
+                        chat={chat}
+                        handleFunction={() => handleEnterChat(chat)}
+                      />
+                    ))}
+                  </Box>
+                  {!user && (
+                    <FormControl mb="1em">
+                      <Input
+                        placeholder="Anonymous User Name"
+                        mb={3}
+                        onChange={e => setAnonyUserName(e.target.value)}
+                      />
+                    </FormControl>
+                  )}
+                </>
               )}
             </Box>
           </ModalBody>

@@ -25,6 +25,7 @@ const CreateChatModal = ({ children }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const toast = useToast();
   const { user, chats, setChats } = ChatState();
+  const [anonyUserName, setAnonyUserName] = useState('');
 
   useEffect(() => {
     if (isOpen && selectedUsers.length > 0) setSelectedUsers([]);
@@ -74,7 +75,7 @@ const CreateChatModal = ({ children }) => {
         {
           name: chatName,
           users: JSON.stringify(selectedUsers.map(u => u._id)),
-          isAnonymous: !user ? true : false,
+          anonyUserName: anonyUserName === '' ? 'user' : anonyUserName,
         },
         config
       );
@@ -124,10 +125,18 @@ const CreateChatModal = ({ children }) => {
             <FormControl mb="1em">
               <Input
                 placeholder="Chat Name"
-                mb={3}
                 onChange={e => setChatName(e.target.value)}
               />
             </FormControl>
+            {!user && (
+              <FormControl mb="1em">
+                <Input
+                  placeholder="Anonymous User Name"
+                  mb={3}
+                  onChange={e => setAnonyUserName(e.target.value)}
+                />
+              </FormControl>
+            )}
             <SearchUser handleUsers={handleUsers} />
             <Box mt="1em" w="100%" display="flex" flexWrap="wrap">
               {selectedUsers.map(u => (
