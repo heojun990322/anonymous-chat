@@ -23,8 +23,11 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
 
 const createChat = expressAsyncHandler(async (req, res) => {
   // 익명 유저 생성
-  if (req.user === "anonymous" && req.body.isAnonymous) {
-    const user = await User.create({ isAnonymous: true });
+  if (req.user === "anonymous") {
+    const user = await User.create({
+      userName: req.body.anonyUserName,
+      isAnonymous: true,
+    });
 
     if (user) {
       req.user = user;
@@ -61,8 +64,11 @@ const createChat = expressAsyncHandler(async (req, res) => {
 
 const enterChat = expressAsyncHandler(async (req, res) => {
   // 익명 유저 생성
-  if (req.user === "anonymous" && req.body.isAnonymous) {
-    const user = await User.create({ isAnonymous: true });
+  if (req.user === "anonymous") {
+    const user = await User.create({
+      userName: req.body.anonyUserName,
+      isAnonymous: true,
+    });
 
     if (user) {
       req.user = user;
