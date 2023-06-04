@@ -18,6 +18,10 @@ import { SearchIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import './style.css';
 import ScrollableChat from './ScrollableChat';
+import io from 'socket.io-client';
+
+const ENDPOINT = 'http://localhost:8000';
+var socket, selectedChatCompare;
 
 const Chat = ({ fetchAgain, setFetchAgain }) => {
   const {
@@ -32,12 +36,26 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState('');
+  const [socketConnected, setsocketConnected] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
-    if (!user) setSelectedChat(null);
+    socket = io(ENDPOINT);
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setSelectedChat(null);
+    } else {
+      socket.emit('setup', user);
+      socket.on('connected', () => setsocketConnected(true));
+    }
     // eslint-disable-next-line
   }, [user]);
+
+  useEffect(() => {
+    if (socketConnected) console.log(`${user._id} connected to socket!`);
+  }, [socketConnected]);
 
   useEffect(() => {
     if (!user && chats.length === 1) {
