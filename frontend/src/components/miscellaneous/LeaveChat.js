@@ -19,8 +19,14 @@ import axios from 'axios';
 
 const LeaveChat = ({ fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { selectedChat, setSelectedChat, user, anonyUser, setAnonyUser } =
-    ChatState();
+  const {
+    setChats,
+    selectedChat,
+    setSelectedChat,
+    user,
+    anonyUser,
+    setAnonyUser,
+  } = ChatState();
   const toast = useToast();
 
   const handleLeave = async () => {
@@ -50,9 +56,12 @@ const LeaveChat = ({ fetchAgain, setFetchAgain }) => {
         );
       }
 
-      setAnonyUser(null);
+      if (anonyUser) {
+        setChats([]);
+        setAnonyUser(null);
+      } else setFetchAgain(!fetchAgain);
+
       setSelectedChat(null);
-      setFetchAgain(!fetchAgain);
     } catch (error) {
       toast({
         title: 'Error Occured!',

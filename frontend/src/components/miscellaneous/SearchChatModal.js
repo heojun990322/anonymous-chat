@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Button,
-  Text,
   useDisclosure,
   Modal,
   ModalOverlay,
@@ -21,14 +20,11 @@ import { Spinner } from '@chakra-ui/react';
 
 const SearchChatModal = ({ children }) => {
   const modal = useDisclosure();
-
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
-
   const toast = useToast();
-
-  const { user, chats } = ChatState();
+  const { user, chats, setChats } = ChatState();
 
   React.useEffect(() => {
     if (modal.isOpen && search.length > 0) {
@@ -85,7 +81,40 @@ const SearchChatModal = ({ children }) => {
     }
   };
 
-  const handleUsers = (userToAdd, onClose) => {};
+  const handleEnterChat = async chat => {
+    try {
+      setLoading(true);
+
+      const config = {
+        headers: {
+          Authorization: user ? `Bearer ${user.token}` : `Bearer anonymous`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/chat/enter`,
+        {
+          chatId: chat._id,
+          isAnonymous: !user ? true : false,
+        },
+        config
+      );
+
+      setChats([data, ...chats]);
+      setLoading(false);
+      modal.onClose();
+    } catch (error) {
+      toast({
+        title: 'Error Occured!',
+        description: error.response.data.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom',
+      });
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -151,7 +180,7 @@ const SearchChatModal = ({ children }) => {
                   {searchResult?.map(chat => (
                     <ChatItem
                       chat={chat}
-                      handleFunction={() => handleUsers(chat, modal.onClose)}
+                      handleFunction={() => handleEnterChat(chat)}
                     />
                   ))}
                 </Box>
