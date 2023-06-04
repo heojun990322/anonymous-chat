@@ -183,21 +183,23 @@ const SearchChatModal = ({ children }) => {
                 <>
                   <Box role="listbox" borderTopWidth="1px" pt={4} pb={4}>
                     {searchResult?.map(chat => (
-                      <ChatItem
-                        chat={chat}
-                        handleFunction={() => handleEnterChat(chat)}
-                      />
+                      <>
+                        <ChatItem
+                          chat={chat}
+                          handleFunction={() => handleEnterChat(chat)}
+                        />
+                        {!user && (
+                          <FormControl mb="1em">
+                            <Input
+                              placeholder="Anonymous User Name"
+                              mb={3}
+                              onChange={e => setAnonyUserName(e.target.value)}
+                            />
+                          </FormControl>
+                        )}
+                      </>
                     ))}
                   </Box>
-                  {!user && (
-                    <FormControl mb="1em">
-                      <Input
-                        placeholder="Anonymous User Name"
-                        mb={3}
-                        onChange={e => setAnonyUserName(e.target.value)}
-                      />
-                    </FormControl>
-                  )}
                 </>
               )}
             </Box>
