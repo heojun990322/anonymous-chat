@@ -19,7 +19,14 @@ const ScrollableChat = ({ messages }) => {
           <>
             {(isDifferentSender(messages, m, i, id) ||
               isFirstMessage(messages, i, id)) && (
-              <Text color="black">{m.sender.userName}</Text>
+              <div style={{ display: 'flex' }} key={m.sender.userName}>
+                <Text
+                  style={{ marginLeft: `${m.sender._id === id ? 'auto' : 0}` }}
+                  color="black"
+                >
+                  {m.sender.userName}
+                </Text>
+              </div>
             )}
             <div style={{ display: 'flex' }} key={m._id}>
               <Text
