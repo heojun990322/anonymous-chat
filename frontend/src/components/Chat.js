@@ -44,6 +44,17 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
   }, []);
 
   useEffect(() => {
+    socket.on('message recieved', newMessageRecieved => {
+      // if chat is selected and matches current chat
+      if (
+        selectedChatCompare ||
+        selectedChatCompare._id === newMessageRecieved.chat._id
+      )
+        setMessages([...messages, newMessageRecieved]);
+    });
+  });
+
+  useEffect(() => {
     if (!user) {
       setSelectedChat(null);
     } else {
@@ -81,6 +92,7 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
     }
 
     fetchMessages();
+    selectedChatCompare = selectedChat;
     // eslint-disable-next-line
   }, [selectedChat]);
 
@@ -138,7 +150,7 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
           config
         );
 
-        console.log(data);
+        socket.emit('new message', data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
