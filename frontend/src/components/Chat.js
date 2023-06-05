@@ -47,7 +47,7 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
     socket.on('message recieved', newMessageRecieved => {
       // if chat is selected and matches current chat
       if (
-        selectedChatCompare ||
+        selectedChatCompare &&
         selectedChatCompare._id === newMessageRecieved.chat._id
       )
         setMessages([...messages, newMessageRecieved]);
@@ -63,10 +63,6 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
     }
     // eslint-disable-next-line
   }, [user]);
-
-  useEffect(() => {
-    if (socketConnected) console.log(`${user._id} connected to socket!`);
-  }, [socketConnected]);
 
   useEffect(() => {
     if (!user && chats.length === 1) {
