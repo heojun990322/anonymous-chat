@@ -66,7 +66,12 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
   }, [chats]);
 
   useEffect(() => {
-    if (anonyUser) setSelectedChat(chats[0]);
+    if (anonyUser) {
+      socket.emit('setup', anonyUser);
+      socket.on('connected', () => setsocketConnected(true));
+
+      setSelectedChat(chats[0]);
+    }
   }, [anonyUser]);
 
   useEffect(() => {
@@ -98,6 +103,8 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
 
       setMessages(data);
       setLoading(false);
+
+      socket.emit('join chat', selectedChat._id);
     } catch (error) {
       toast({
         title: 'Error Occured!',

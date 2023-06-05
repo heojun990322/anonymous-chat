@@ -41,11 +41,16 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("Connected to socket.io");
+  console.log("Connected to socket.io".blue);
 
   socket.on("setup", (userData) => {
     socket.join(userData._id);
-    console.log(userData._id);
+    console.log(`loggin in user: ${userData._id}, ${userData.userName}`.green);
     socket.emit("connected");
+  });
+
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log(`User Joined Room: ${room}`.green);
   });
 });
