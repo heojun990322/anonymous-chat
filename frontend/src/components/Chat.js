@@ -22,8 +22,14 @@ import io from 'socket.io-client';
 
 const ENDPOINT = 'http://localhost:8000';
 var socket, selectedChatCompare;
+var prevChatsLength = 0;
 
-const Chat = ({ fetchAgain, setFetchAgain }) => {
+const Chat = ({
+  fetchAgain,
+  setFetchAgain,
+  fetchChatsAgain,
+  setFetchChatsAgain,
+}) => {
   const {
     chats,
     setChats,
@@ -52,6 +58,8 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
       )
         setMessages([...messages, newMessageRecieved]);
     });
+
+    socket.on('fetch chats', () => setFetchChatsAgain(!fetchChatsAgain));
   });
 
   useEffect(() => {
@@ -70,6 +78,12 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
       if (users[users.length - 1].isAnonymous)
         setAnonyUser(users[users.length - 1]);
     }
+
+    if (prevChatsLength < chats.length) {
+      socket.emit('chat list update', chats[0]);
+    }
+
+    prevChatsLength = chats.length;
   }, [chats]);
 
   useEffect(() => {

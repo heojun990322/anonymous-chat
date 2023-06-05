@@ -6,6 +6,7 @@ import Header from '../components/Header';
 
 const Mainpage = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
+  const [fetchChatsAgain, setFetchChatsAgain] = useState(false);
 
   return (
     <div style={{ width: '100%' }}>
@@ -17,8 +18,13 @@ const Mainpage = () => {
         h="91.5vh"
         p="10px"
       >
-        <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
-        <ChatList fetchAgain={fetchAgain} />
+        <ChatBox
+          fetchAgain={fetchAgain}
+          setFetchAgain={setFetchAgain}
+          fetchChatsAgain={fetchChatsAgain}
+          setFetchChatsAgain={setFetchChatsAgain}
+        />
+        <ChatList fetchAgain={fetchAgain} fetchChatsAgain={fetchChatsAgain} />
       </Box>
     </div>
   );

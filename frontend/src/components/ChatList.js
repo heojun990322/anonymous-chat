@@ -5,7 +5,7 @@ import axios from 'axios';
 import ChatLoading from './miscellaneous/ChatLoading';
 import { BsFillPersonFill } from 'react-icons/bs';
 
-const ChatList = ({ fetchAgain }) => {
+const ChatList = ({ fetchAgain, fetchChatsAgain }) => {
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast();
 
@@ -39,6 +39,12 @@ const ChatList = ({ fetchAgain }) => {
     }
     // eslint-disable-next-line
   }, [fetchAgain]);
+
+  useEffect(() => {
+    if (user) {
+      fetchChats();
+    }
+  }, [fetchChatsAgain]);
 
   return (
     <Box

@@ -54,6 +54,18 @@ io.on("connection", (socket) => {
     console.log(`User Joined Room: ${room}`.white);
   });
 
+  socket.on("chat list update", (chat) => {
+    if (!chat.users) return console.log("chat.users not defined".red);
+
+    var users = chat.users;
+
+    chat.users.forEach((user) => {
+      if (user._id == users[users.length - 1]) return;
+
+      socket.in(user._id).emit("fetch chats");
+    });
+  });
+
   socket.on("new message", (newMessageRecieved) => {
     var chat = newMessageRecieved.chat;
 
