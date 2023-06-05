@@ -204,6 +204,7 @@ const Chat = ({ fetchAgain, setFetchAgain }) => {
                 bg="white"
                 _placeholder={{
                   color: 'gray.500',
+                  fontFamily: 'Noto Sans KR',
                 }}
                 color="black"
                 placeholder="Enter a message.."

@@ -23,6 +23,7 @@ const ScrollableChat = ({ messages }) => {
                 <Text
                   style={{ marginLeft: `${m.sender._id === id ? 'auto' : 0}` }}
                   color="black"
+                  fontFamily="Noto Sans KR"
                 >
                   {m.sender.userName}
                 </Text>
@@ -41,6 +42,7 @@ const ScrollableChat = ({ messages }) => {
                   maxWidth: '75%',
                 }}
                 color="black"
+                fontFamily="Noto Sans KR"
               >
                 {m.content}
               </Text>
