@@ -1,0 +1,5 @@
+{
+  "events": {
+    "crash": "sh -c 'lsof -i :8000 -t | xargs kill'"
+  }
+}
