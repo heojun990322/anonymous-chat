@@ -54,8 +54,8 @@ const Header = () => {
               </MenuButton>
               <MenuList>
                 <MenuItem onClick={logoutHandler}>Logout</MenuItem>
-                <MenuDivider />
-                <MenuItem>Delete account</MenuItem>
+                {/*<MenuDivider />*/}
+                {/*<MenuItem>Delete account</MenuItem>*/}
               </MenuList>
             </Menu>
           ) : (
