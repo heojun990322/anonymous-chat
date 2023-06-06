@@ -45,7 +45,14 @@ io.on("connection", (socket) => {
 
   socket.on("setup", (userData) => {
     socket.join(userData._id);
-    console.log(`loggin in user: ${userData._id}, ${userData.userName}`.white);
+    userData.isAnonymous
+      ? console.log(
+          `anonymous user: ${userData._id}, ${userData.userName}`.white
+        )
+      : console.log(
+          `loggin in user: ${userData._id}, ${userData.userName}`.white
+        );
+
     socket.emit("connected");
   });
 
@@ -75,6 +82,7 @@ io.on("connection", (socket) => {
       if (user._id == newMessageRecieved.sender._id) return;
 
       socket.in(user._id).emit("message recieved", newMessageRecieved);
+      if (!user.isAnonymous) socket.in(user._id).emit("fetch chats");
     });
   });
 });

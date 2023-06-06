@@ -11,7 +11,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
       .then(async (results) => {
         results = await User.populate(results, {
           path: "latestMessage.sender",
-          select: "id",
+          select: "id userName",
         });
         res.status(200).send(results);
       });

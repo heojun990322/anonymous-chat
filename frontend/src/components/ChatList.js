@@ -86,8 +86,6 @@ const ChatList = ({ fetchAgain, fetchChatsAgain }) => {
           <Stack overflowY="scroll">
             {chats.map(chat => (
               <Box
-                display="flex"
-                justifyContent="space-between"
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
                 bg={
@@ -105,15 +103,27 @@ const ChatList = ({ fetchAgain, fetchChatsAgain }) => {
                 borderRadius="lg"
                 key={chat._id}
               >
-                <Text>{chat.name}</Text>
-                <Text display="flex">
-                  <BsFillPersonFill
-                    style={{
-                      margin: '5 2 0 0',
-                    }}
-                  />
-                  {chat.users.filter(u => !u.isAnonymous).length}
-                </Text>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
+                  {chat.name}
+                  <Text display="flex">
+                    <BsFillPersonFill
+                      style={{
+                        margin: '5 2 0 0',
+                      }}
+                    />
+                    {chat.users.filter(u => !u.isAnonymous).length}
+                  </Text>
+                </div>
+                {chat.latestMessage && (
+                  <Text fontSize="xs">
+                    <b>{chat.latestMessage.sender.userName} : </b>
+                    {chat.latestMessage.content.length > 50
+                      ? chat.latestMessage.content.substring(0, 51) + '...'
+                      : chat.latestMessage.content}
+                  </Text>
+                )}
               </Box>
             ))}
           </Stack>
