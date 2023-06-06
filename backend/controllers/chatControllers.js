@@ -50,10 +50,12 @@ const createChat = expressAsyncHandler(async (req, res) => {
       users: users,
     });
 
-    const fullChat = await Chat.findOne({ _id: chat._id }).populate(
-      "users",
-      "-password"
-    );
+    const fullChat = await Chat.findOne({ _id: chat._id })
+      .populate("users", "-password")
+      .populate({
+        path: "latestMessage",
+        populate: { path: "sender" },
+      });
 
     res.status(200).json(fullChat);
   } catch (error) {
@@ -86,7 +88,12 @@ const enterChat = expressAsyncHandler(async (req, res) => {
     {
       new: true,
     }
-  ).populate("users", "-password");
+  )
+    .populate("users", "-password")
+    .populate({
+      path: "latestMessage",
+      populate: { path: "sender" },
+    });
 
   if (!added) {
     res.status(404);
