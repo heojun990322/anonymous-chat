@@ -47,6 +47,9 @@ const Chat = ({
 
   useEffect(() => {
     socket = io(ENDPOINT);
+    if (user) {
+      socket.emit('setup', user);
+    }
   }, []);
 
   useEffect(() => {
@@ -67,7 +70,6 @@ const Chat = ({
       setSelectedChat(null);
     } else {
       socket.emit('setup', user);
-      socket.on('connected', () => setsocketConnected(true));
     }
     // eslint-disable-next-line
   }, [user]);
@@ -89,7 +91,6 @@ const Chat = ({
   useEffect(() => {
     if (anonyUser) {
       socket.emit('setup', anonyUser);
-      socket.on('connected', () => setsocketConnected(true));
 
       setSelectedChat(chats[0]);
     }
@@ -105,6 +106,10 @@ const Chat = ({
     selectedChatCompare = selectedChat;
     // eslint-disable-next-line
   }, [selectedChat]);
+
+  useEffect(() => {
+    if (user) setFetchChatsAgain(!fetchChatsAgain);
+  }, [messages]);
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
