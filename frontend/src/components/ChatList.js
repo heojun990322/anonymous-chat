@@ -90,8 +90,16 @@ const ChatList = ({ fetchAgain, fetchChatsAgain }) => {
                 justifyContent="space-between"
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? 'blue.800' : 'blue.50'}
-                color={selectedChat === chat ? 'white' : 'black'}
+                bg={
+                  selectedChat && selectedChat._id === chat._id
+                    ? 'blue.800'
+                    : 'blue.50'
+                }
+                color={
+                  selectedChat && selectedChat._id === chat._id
+                    ? 'white'
+                    : 'black'
+                }
                 px={3}
                 py={2}
                 borderRadius="lg"
