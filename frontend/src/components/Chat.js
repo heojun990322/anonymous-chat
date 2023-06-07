@@ -23,6 +23,7 @@ import io from 'socket.io-client';
 const ENDPOINT = process.env.BACKEND_URL;
 var socket, selectedChatCompare;
 var prevChatsLength = 0;
+var latestMessageId = null;
 
 const Chat = ({
   fetchAgain,
@@ -58,8 +59,13 @@ const Chat = ({
       if (
         selectedChatCompare &&
         selectedChatCompare._id === newMessageRecieved.chat._id
-      )
-        setMessages([...messages, newMessageRecieved]);
+      ) {
+        if (
+          !latestMessageId ||
+          (latestMessageId && latestMessageId !== newMessageRecieved._id)
+        )
+          setMessages([...messages, newMessageRecieved]);
+      }
     });
 
     socket.on('fetch chats', () => setFetchChatsAgain(!fetchChatsAgain));
@@ -109,6 +115,8 @@ const Chat = ({
 
   useEffect(() => {
     if (user) setFetchChatsAgain(!fetchChatsAgain);
+    if (messages.length > 0)
+      latestMessageId = messages[messages.length - 1]._id;
   }, [messages]);
 
   const fetchMessages = async () => {
