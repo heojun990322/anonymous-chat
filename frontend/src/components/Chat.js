@@ -20,7 +20,7 @@ import './style.css';
 import ScrollableChat from './ScrollableChat';
 import io from 'socket.io-client';
 
-const ENDPOINT = process.env.BACKEND_URL;
+const ENDPOINT = process.env.REACT_APP_BACKEND_URL;
 var socket, selectedChatCompare;
 var prevChatsLength = 0;
 var latestMessageId = null;
