@@ -6,6 +6,7 @@ const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -14,6 +15,15 @@ const app = express();
 
 // JSON 데이터를 받기 위함
 app.use(express.json());
+
+// access-control-allow-origin header settings
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("API is running successfully!");
