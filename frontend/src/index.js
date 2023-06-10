@@ -6,6 +6,9 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import theme from './theme';
 import ChatProvider from './context/ChatProvider';
+import axios from 'axios';
+
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
