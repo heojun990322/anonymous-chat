@@ -19,7 +19,7 @@ app.use(express.json());
 // access-control-allow-origin header settings
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.PROXY_URL,
     credentials: true,
     optionsSuccessStatus: 200,
   })
@@ -46,7 +46,7 @@ const server = app.listen(
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.PROXY_URL,
   },
 });
 
