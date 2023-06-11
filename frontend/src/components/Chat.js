@@ -46,7 +46,7 @@ const Chat = ({
   const toast = useToast();
 
   useEffect(() => {
-    socket = io.connect(process.env.REACT_APP_PROXY_URL, { path: '/ws/' });
+    socket = io.connect('/', { path: '/ws/' });
     if (user) {
       socket.emit('setup', user);
     }
