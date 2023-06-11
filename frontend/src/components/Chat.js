@@ -20,7 +20,6 @@ import './style.css';
 import ScrollableChat from './ScrollableChat';
 import io from 'socket.io-client';
 
-const ENDPOINT = process.env.REACT_APP_BACKEND_URL;
 var socket, selectedChatCompare;
 var prevChatsLength = 0;
 var latestMessageId = null;
@@ -47,7 +46,7 @@ const Chat = ({
   const toast = useToast();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io.connect(process.env.REACT_APP_PROXY_URL, { path: '/ws/' });
     if (user) {
       socket.emit('setup', user);
     }
